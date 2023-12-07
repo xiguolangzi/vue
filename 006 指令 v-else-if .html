@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Vue 指令 v-if v-else-if v-else</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 
+      v-else、v-else-if 前面必须配合 v-if 使用，否则报错
+      v-else-if = "判断表达式"
+      v-else 后面不用接表达式
+     -->
+    <p v-if="gender === 1">性别：男</p>
+    <p v-else>性别：女</p>
+    <hr>
+    <p v-if="score >=90 ">成绩A：奖励电脑一台</p>
+    <p v-else-if="score >=80">成绩B：周末郊游</p>
+    <p v-else-if="score >=70">成绩C：奖励零食大礼包</p>
+    <p v-else>成绩D：一周不能玩手机</p>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        gender: 1,
+        score: 80
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

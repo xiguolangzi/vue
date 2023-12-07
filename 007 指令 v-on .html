@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Vue 指令 v-on </title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 
+      v-on
+        1.作用：注册事件 = 添加事件 + 提供处理逻辑
+        2.语法：v-on:事件名 = '内联语句'
+        3.简写：v-on:事件名 可以简写成 @事件名
+     -->
+    <button @click="count--">-</button>
+    <span>{{count}}</span>
+    <button v-on:click="count++">+</button>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        count: 100
+      }
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Vue 指令 v-html </title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 指令 v-html 相当于 innerhtml 解析标签-->
+    <div v-html="msg"></div>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        msg: `<a href="http://www.itheima.com">黑马程序员</a>`,
+      }
+    })
+  </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Vue 指令 v-show v-if </title>
+
+  <style>
+    .box {
+      width: 400px;
+      height: 200px;
+      border: 1px solid black;
+      margin: 10px;
+      line-height: 200px;
+      text-align: center;
+      background-color: aquamarine;
+      border-radius: 5px;
+      box-shadow: 2px 2px 2px #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 
+      v-show:
+        1.作用：控制元素显示隐藏
+        2.语法：v-show = "表达式"，表达式为 ture 显示，false 隐藏
+        3.原理：切换 display:none 控制显示隐藏
+        4.场景：频繁切换显示隐藏的场景
+        5.隐藏后开发者工具可见代码
+     -->
+    <div v-show="flag" class="box">
+      我是 v-show 控制的盒子
+    </div>
+    <!-- 
+      v-if:
+        1.作用：控制元素显示隐藏 （条件渲染）
+        2.语法：v-if = "表达式"，表达式为 ture 显示，false 隐藏
+        3.原理：基于 条件判断，是否 创建 或 移除 元素节点
+        4.场景：要吗显示、要吗隐藏，不频繁切换的场景
+        5.隐藏后开发者工具没有代码痕迹
+     -->
+    <div v-if="flag" class="box">
+      我是 v-if 控制的盒子
+    </div>
+  </div>
+
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        flag: true
+      }
+    })
+  </script>
+
+</body>
+
+</html>

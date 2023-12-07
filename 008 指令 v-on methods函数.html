@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 指令 v-on methods</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 
+      v-on
+        1.作用：注册事件 = 添加事件 + 提供处理逻辑
+        2.语法：v-on:事件名 = 'methods中的函数名'
+        3.简写：v-on:事件名 可以简写成 @事件名
+     -->
+    <button @click="fn">切换 显示/隐藏</button>
+    <h1 v-show="isshow">黑马程序员</h1>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        isshow: true
+      },
+      methods: {
+        fn() {
+          // app.isshow = !app.isshow
+          // this 指向当前实例，避免当前实例 app 名字发生改变导致引用错误！！！
+          this.isshow = !this.isshow
+        }
+      }
+    })
+  </script>
+
+</body>
+
+</html>
