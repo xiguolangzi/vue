@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 指令 v-bind 动态设置标签属性</title>
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- 
+    v-bind
+    1.语法：v-bind:属性名="表达式"
+    2.作用：动态修改标签属性
+    3.简写 v-bind:src 简写成 :src
+   -->
+    <img v-bind:src="imgUrl" :title="msg">
+  </div>
+
+  <script src="./vue.js"></script>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        imgUrl: './img/樱桃.png',
+        msg: '点我点我'
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

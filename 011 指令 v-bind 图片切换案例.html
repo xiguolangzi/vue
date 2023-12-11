@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片切换</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- v-on切换图片，v-show控制按钮的显示隐藏 -->
+    <button @click="index--" v-show="index > 0">上一张</button>
+    <div class="img">
+      <!-- 通过 v-bind 动态设置切换图片 -->
+      <img :src="list[index]">
+    </div>
+    <button @click="index++" v-show="index < list.length - 1">下一张</button>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        index: 0,
+        list: [
+          './img/火龙果.png',
+          './img/荔枝.png',
+          './img/榴莲.png',
+          './img/鸭梨.png',
+          './img/樱桃.png',
+        ]
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

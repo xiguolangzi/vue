@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 指令 v-for 循环渲染</title>
+</head>
+
+<body>
+
+  <div id="app">
+    <h3>小黑水果店</h3>
+    <ul>
+      <!-- 
+        v-for
+        语法：v-for = "(item,index) in 数组名"
+        作用：基于数据循环，多次渲染整个元素 -> 数组、数字、对象、函数...
+      -->
+      <li v-for="(item,index) in list">{{item}}--{{index}}</li>
+      <hr>
+      <!-- 不需要index -->
+      <li v-for="(item) in list">{{item}}</li>
+      <hr>
+      <!-- 简写 -->
+      <li v-for="item in list">{{item}}</li>
+    </ul>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        list: ['西瓜', '苹果', '香蕉']
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小黑记事本案例</title>
+  <link rel="stylesheet" href="./css/016css.css">
+</head>
+
+<body>
+  <!-- 主题区域 -->
+  <section id="app">
+    <!-- 输入框 -->
+    <header class="header">
+      <h1>小黑记事本</h1>
+      <input type="text" placeholder="请输入任务" class="new-todo" v-model="todoName">
+      <button class="add" @click="add(todoName)">添加任务</button>
+    </header>
+
+    <!-- 列表区域 -->
+    <section class="main">
+      <ul class="todo-list">
+        <li class="todo" v-for="(item,index) in lists" :key="item.id">
+          <div class="view">
+            <span class="index">{{ index + 1 }}</span>
+            <label>{{item.name}}</label>
+            <button class="destroy" @click="del(item.id)"></button>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 统计 和 清空 区域 -->
+    <footer class="footer" v-show="lists.length > 0">
+      <!-- 统计 -->
+      <span class="todo-count">
+        合 计：<strong> {{lists.length}}</strong>
+      </span>
+      <!-- 清空 -->
+      <button class="clear-completed" @click="clear">
+        清空任务
+      </button>
+    </footer>
+  </section>
+
+  <script src="./vue.js"></script>
+  <script>
+    /* 
+    总结：
+      1.列表渲染：
+        v-for key的设置 {{插值表达式}}
+      2.删除功能：
+        v-on调用传参 this.list = this.list.filter(item => item.id !== id) 覆盖修改原数组
+      3.添加功能
+        v-model 绑定 this.list.unshift({id:+new Date(),name:todoName.trim()}) 追加修改元素组，并.trim()去前后空格
+      4.底部统计 和 清空
+        list.length 统计列表合计数量
+        this.list = [] 清空列表
+        v-show="list.length > 0" 控制底部显示隐藏
+    
+    */
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        todoName: '',
+        lists: [
+          { id: 1, name: '跑步锻炼20分钟' },
+          { id: 2, name: '复习数组语法' },
+          { id: 3, name: '学习西语' }
+        ]
+
+      },
+      methods: {
+        // 添加任务
+        add() {
+          // 输入内容.trim()去空格，判断为空处理
+          if (this.todoName.trim() === "") {
+            alert("任务名称不能为空！")
+            return
+          }
+          // 数组lists 追加元素 name id
+          this.lists.unshift({
+            // id 采用时间戳
+            id: +new Date(),
+            // .trim()去前后空格
+            name: this.todoName.trim()
+          })
+          this.todoName = ''
+        },
+        // 列表删除数据
+        del(id) {
+          this.lists = this.lists.filter(item => item.id !== id)
+        },
+        // 清空数据
+        clear() {
+          this.lists = []
+        }
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>
