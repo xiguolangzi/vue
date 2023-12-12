@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>指令 v-bind 操作类的案例</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul {
+    display: flex;
+    border-bottom: 2px solid red;
+    list-style: none;
+    padding: 0 10px;
+  }
+
+  li {
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+  }
+
+  li a {
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    color: #333333;
+  }
+
+  /* 
+    只要li里面有class='active',就渲染li
+    也可写成 li a.active 
+  */
+  li>.active {
+    background-color: red;
+    color: #fff;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <ul>
+      <!--  @click="activeIndex=index" 切换高亮 -->
+      <li v-for="(item,index) in list" :key="item.id" @click="activeIndex=index">
+        <!-- 
+          1.active:(index == activeIndex) 
+           作用：控制高亮
+        -->
+        <a :class="{active:(index == activeIndex)}" href="#">{{item.name}}</a>
+      </li>
+    </ul>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        // activeIndex 控制切换高亮的参数
+        activeIndex: 0,
+        list: [
+          { id: 1, name: '京东秒杀' },
+          { id: 2, name: '每日特价' },
+          { id: 3, name: '品类秒杀' },
+        ]
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

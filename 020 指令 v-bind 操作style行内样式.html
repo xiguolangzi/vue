@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v-bind 操作style行内样式</title>
+  <style>
+    .progress {
+      background-color: black;
+      width: 800px;
+      height: 30px;
+      border-radius: 10px;
+
+    }
+
+    .inner {
+      background-color: blue;
+      height: 30px;
+      border-radius: 10px;
+    }
+
+    .bb {
+      margin: 10px;
+      width: 800px;
+      height: 30px;
+      text-align: center
+    }
+
+    .box {
+      width: 800px;
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 外层盒子，底色黑色 -->
+    <div class="progress">
+      <!-- 内层盒子，底色蓝色 -->
+      <!-- 
+        v-bind:style
+        1.语法：:style="{CSS属性名1：'属性值',CSS属性名2：'属性值',...}"
+        2.注意：
+          1）backgruand-color 属性值需要写成 'backgruand-color' 或 backgruandColor
+            原因 css属性值不支持 '-' 的，会报错！
+          2）属性值必需带引号；
+       -->
+      <div class="inner" :style="{width: percente+'%'}">
+      </div>
+    </div>
+    <div class="bb">
+      <span>{{percente}}%</span>
+    </div>
+    <div class="box">
+      <button @click="percente = 0">0%</button>
+      <button @click="percente = 25">25%</button>
+      <button @click="percente = 50">50%</button>
+      <button @click="percente = 75">75%</button>
+      <button @click="percente = 100">100%</button>
+    </div>
+
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        percente: 50
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+
+</body>
+
+</html>

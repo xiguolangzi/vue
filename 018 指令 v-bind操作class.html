@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>指令 v-bind 操作 class 属性</title>
+</head>
+<style>
+  .box {
+    width: 200px;
+    height: 200px;
+    border: 3px solid #000;
+    font-size: 30px;
+    margin-top: 10px;
+  }
+
+  .pink {
+    background-color: pink;
+  }
+
+  .big {
+    width: 300px;
+    height: 300px;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <!-- 
+      v-bind:class{}
+      1.语法：v-bind:class="{类名1：布尔值，类名2：布尔值，...}"
+      2.作用：通过 布尔值 动态控制 类属性
+      3.场景：一个类名来回切换
+     -->
+    <div class="box" :class="{pink:true,big:true}">黑马程序员</div>
+    <!-- 
+      v-bind:class[]
+      1.语法：v-bind:class="['类名1'，'类名2']"
+      2.作用：通过 数组 动态控制 类属性
+      3.场景：批量添加类名 或 批量删除类名
+      -->
+    <div class="box" :class="['pink','big']">黑马程序员</div>
+  </div>
+
+  <script src="./vue.js"></script>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

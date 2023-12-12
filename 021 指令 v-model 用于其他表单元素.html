@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v-model 用于其他表单元素</title>
+</head>
+
+<body>
+  <div id="app">
+    <h3>小黑学习网</h3>
+    姓名：
+    <!-- 
+      1.文本框：
+      v-model="usernam 绑定的是一个值 
+    -->
+    <input type="text" v-model="username">
+    <br>
+    <br>
+
+    是否单身：
+    <!--
+      2.单选框： 
+      v-model="isSingle" 绑定的是一个布尔值 
+    -->
+    <input type="checkbox" v-model="isSingle">
+    <br>
+    <br>
+
+    性别：
+    <!-- 
+      3.多选框：
+      v-model="gender" 关联 value 的值 
+    -->
+    <input type="radio" name="genderx" value="1" v-model="gender"> 男
+    <input type="radio" name="genderx" value="2" v-model="gender"> 女
+    <br>
+    <br>
+
+    所在城市：
+    <!-- 
+      4.下拉菜单：
+      select的value值 关联 option的value值
+      select 使用 v-model="cityId 关联 value值
+     -->
+    <select v-model="cityId">
+      <option value="001">北京</option>
+      <option value="002">上海</option>
+      <option value="003">深圳</option>
+      <option value="004">吉林</option>
+    </select>
+    <br>
+    <br>
+
+    自我描述：
+    <!-- 
+      5.文本框：
+      v-model="remark" 绑定的是一个值 
+    -->
+    <textarea v-model="remark"></textarea>
+    <br>
+    <br>
+    <button> 立即注册 </button>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        username: '',
+        isSingle: true,
+        gender: 1,
+        cityId: '002',
+        remark: '',
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>
