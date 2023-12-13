@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>computed 计算属性</title>
+  <style>
+    #app {
+      width: 400px;
+    }
+
+    table {
+      /* 合并表格边框 */
+      border-collapse: collapse;
+      /* 表格宽度沾满容器 */
+      width: 100%;
+    }
+
+    th,
+    td {
+      /* 设置边框 */
+      border: 1px solid black;
+      /* 设置单元格内边距 */
+      padding: 8px;
+      /* 设置单元格对其方式 */
+      text-align: center;
+    }
+
+    span {
+      position: absolute;
+      left: 145px;
+      top: -4px;
+      width: 16px;
+      height: 16px;
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      border-radius: 50%;
+      background-color: #e63f32;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h3>小黑的礼物清单🛒 <span> {{totalCount}}</span></h3>
+    <table>
+      <tr>
+        <th>名字</th>
+        <th>数量</th>
+      </tr>
+      <tr v-for="(item,index) in list" :key="item.id">
+        <td>{{item.name}}</td>
+        <td>{{item.num}}</td>
+      </tr>
+    </table>
+    <br>
+    <br>
+    <!-- 引用计算属性 函数名 -->
+    <p> 礼物总数：<strong style="color: red;">{{totalCount}}</strong> 个</p>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        total: 0,
+        list: [
+          { id: 1, name: '篮球', num: 1 },
+          { id: 2, name: '玩具', num: 3 },
+          { id: 3, name: '铅笔', num: 5 },
+        ]
+      },
+      methods: {
+
+      },
+      computed: {
+        // 设置 计算函数 ！相当于一个属性！
+        totalCount() {
+          // computed 与 methods 的区别在于 computed有缓存机制,不更新的情况下多次引用只计算一次
+          console.log("计算属性执行次数")
+          // 计算求和逻辑 list.reduce(求和逻辑,计算的起始值)
+          let total = this.list.reduce((sum, item) => sum + item.num, 0)
+          return total
+        }
+      }
+    })
+  </script>
+
+
+</body>
+
+</html>

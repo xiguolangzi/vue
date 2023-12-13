@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水果购物车</title>
+  <style>
+    #app {
+      /* 版心居中 */
+      margin: 0 auto;
+      width: 70%;
+      max-width: 1200px;
+      padding: 10px;
+    }
+
+    .head {
+      /* background-color: #6594eb; */
+      height: 200px;
+    }
+
+    .head-Banner {
+      width: 100%;
+      height: 90%;
+      /* 背景图片 */
+      background-image: url('img/fruit.jpg');
+      /* 不重复平铺 */
+      background-repeat: no-repeat;
+      /* 尽可能充满容器 */
+      background-size: cover;
+      /* 背景图片位置居中 */
+      background-position: center center;
+    }
+
+    span {
+      font-size: medium;
+      font-weight: 600;
+      color: blue;
+    }
+
+    .body span {
+      /* span转行内块，然后设置宽度 */
+      display: inline-block;
+      width: 40px;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid blue;
+      text-align: center;
+      margin: 5px;
+      padding: 10px;
+    }
+
+    th {
+      background-color: aquamarine;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 头部 -->
+    <div class="head">
+      <div class="head-Banner">
+        <!-- <img src="img/fruit.jpg" style="c"> -->
+      </div>
+      <span>🏠</span>
+      /
+      <span>购物车</span>
+    </div>
+
+    <!-- 主体 -->
+    <div class="body">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="(item,index) in listTH" :key="item.id">{{item.cloumName}}</th>
+          </tr>
+        </thead>
+        <!-- 有数据 -->
+        <tbody v-if="listTD.length > 0">
+          <tr v-for="(item,index) in  listTD" :key="item.id">
+            <td><input type="checkbox" v-model="item.checked"></td>
+            <td><img :src="item.img" :alt="item.name" style="height: 40px;"></td>
+            <td>{{item.price}}</td>
+            <td>
+              <button @click="item.num--" :disabled="item.num<=0"> - </button>
+              <span>{{item.num}}</span>
+              <button @click="item.num++"> + </button>
+            </td>
+            <td>{{item.price * item.num}}</td>
+            <td>
+              <button style="background-color: red;border-color: red;border-radius: 20%; color: aliceblue;">删除
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <!-- 无数据 -->
+        <tbody v-else>
+          <tr>
+            <td :colspan="listTH.length">
+              <p>没有数据！</p>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td></td>
+            <td colspan="2">合计金额：<span
+                style="color: red; font-size: 20px; display: inline-block; width: 80px;">{{totalMoney}}</span>$ </td>
+            <td colspan="2">结算数量：<span style="color: red; font-size: 20px;">{{totalNumber}}</span></td>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+
+    </div>
+
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        listTH: [
+          { id: 1, cloumName: '选中' },
+          { id: 2, cloumName: '图片' },
+          { id: 3, cloumName: '单价' },
+          { id: 4, cloumName: '数量' },
+          { id: 5, cloumName: '小计' },
+          { id: 6, cloumName: '操作' },
+        ],
+        listTD: [
+          { id: 1, checked: true, img: 'img/火龙果.png', name: '火龙果', price: 5, num: 2 },
+          { id: 2, checked: false, img: 'img/荔枝.png', name: '荔枝', price: 1, num: 16 },
+          { id: 3, checked: true, img: 'img/榴莲.png', name: '榴莲', price: 7, num: 111 },
+          { id: 4, checked: false, img: 'img/鸭梨.png', name: '鸭梨', price: 12, num: 1 },
+          { id: 5, checked: true, img: 'img/樱桃.png', name: '樱桃', price: 3, num: 7 },
+        ]
+
+      },
+      methods: {
+        del(id) {
+          this.listTD = this.listTD.filter(item => item.id !== id)
+        }
+      },
+      computed: {
+        totalMoney() {
+          let monye = this.listTD.reduce((sum, item) => sum + item.price * item.num, 0)
+          return monye.toFixed(2)
+        },
+        totalNumber() {
+          let number = this.listTD.reduce((sum, item) => sum + item.num, 0)
+          return number
+        }
+
+      },
+      watch: {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

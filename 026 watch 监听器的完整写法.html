@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>watch监听器的完整写法</title>
+  <style>
+    .lang {
+      display: flex;
+    }
+
+    select option {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="lang">
+      <p>翻译成的语言：</p>
+      <select v-model="obj.langId">
+        <option value="001">中文</option>
+        <option value="002">英语</option>
+        <option value="003">西班牙语</option>
+        <option value="004">德语</option>
+      </select>
+    </div>
+    <div class="trans">
+      <textarea cols="100" rows="10" v-model="obj.datas"></textarea>
+      <textarea cols="100" rows="10" v-model="toDatas"></textarea>
+    </div>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        toDatas: '',
+        obj: {
+          langId: '003',
+          datas: '小黑'
+        }
+      },
+      methods: {
+
+      },
+      computed: {
+
+      },
+      watch: {
+        // watch 监听器的完整写法
+        obj: {
+          // 1. deep: true 深度监听：只要是 obj下的元素 发生变化 就会立即执行
+          deep: true,
+          // 2. immediate: true 立即执行：obj下的元素 未变化之前，初始化执行一次
+          immediate: true,
+          // 3. 执行的 handler 函数 
+          handler(newDatas) {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              this.toDatas = newDatas.langId + newDatas.datas + +new Date()
+            }, 300)
+          }
+        }
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

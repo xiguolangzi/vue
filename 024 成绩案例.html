@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .listbook {
+      width: 800px;
+      background-color: hwb(160 87% 11%);
+    }
+
+    table {
+      width: 100%;
+      padding: 10px;
+    }
+
+    td,
+    th {
+      margin: 5px;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid blue;
+    }
+
+    th {
+      background-color: #105ae6;
+      color: aliceblue;
+    }
+
+    .nonum {
+      width: 100%;
+      height: 50%;
+      text-align: center;
+    }
+
+    .footer {
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .red {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="listbook">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="(item,index) in listTH" :key="item.id">{{item.name}}</th>
+          </tr>
+        </thead>
+        <!-- 1. 由于有2个 tbody 所以使用v-if-else 这样可以不留痕迹 -->
+        <tbody v-if="listTD.length > 0">
+          <!-- 2. v-for遍历 -->
+          <tr v-for="(item,index) in listTD" :key="item.id">
+            <td>{{index+1}}</td>
+            <td>{{item.classname}}</td>
+            <!-- 3. v-bind:class="{属性值：布尔值，...}" -->
+            <td :class="{red:item.grades < 60}">{{item.grades}}</td>
+            <!-- 4. v-on绑定函数 -->
+            <!-- 4.1 v-on:事件名称.修饰符 @click.prevent阻止默认行为，即阻止跳转 -->
+            <td><a href="https://www.baidu.com" @click.prevent="del(item.id)"> 删除</a></td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td colspan="4">暂无数据</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        <!-- 5. 计算属性 -->
+        <!-- 6. v-bind:class 的两种形式 -->
+        <span>总分： <strong :class="{red:true}">{{total}}</strong> 分</span>
+        <span>平均分： <strong :class="['red']">{{vga}}</strong> 分</span>
+      </div>
+
+    </div>
+    <br>
+
+    <div class="addBox">
+      <!-- 7. v-model 双向绑定表单属性 -->
+      科目：<input type="text" placeholder="请输入科目" v-model.trim="classname">
+      <br>
+      分数：<input type="text" placeholder="请输入分数" v-model.number="grades">
+      <br>
+      <br>
+      <button @click="add(classname,grades)"> 添加 </button>
+    </div>
+
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        listTH: [
+          { id: 1, name: '编号' },
+          { id: 2, name: '科目' },
+          { id: 3, name: '成绩' },
+          { id: 4, name: '操作' },
+        ],
+        listTD: [
+          { id: 1, classname: '语文', grades: 46 },
+          { id: 2, classname: '英语', grades: 89 },
+          { id: 3, classname: '数学', grades: 96 },
+        ],
+        classname: '',
+        grades: ''
+
+      },
+      methods: {
+        del(id) {
+          // 8. filter 满足条件生成新列表
+          this.listTD = this.listTD.filter(item => item.id !== id)
+        },
+        add() {
+          if (!this.classname) {
+            alert("科目名称 不能为空!")
+            return
+          }
+          if (typeof (this.grades) !== 'number') {
+            alert("请输入正确的数字！")
+            return
+          }
+          // 9. unshift 列表追加数据
+          this.listTD.unshift({
+            id: +new Date(),
+            classname: this.classname,
+            grades: this.grades
+          })
+          // 10. 添加玩重置输入框
+          this.classname = ''
+          this.grades = ''
+        }
+
+      },
+      computed: {
+        total: {
+          get() {
+            // 11. reduce 列表求和 reduce(计算逻辑，遍历起始元素)
+            let sum = this.listTD.reduce((sum, item) => sum + item.grades, 0)
+            return sum.toFixed(2)
+          },
+          set() {
+          }
+        },
+        vga: {
+          get() {
+            // 12. 计算出错 默认为0
+            let value = (this.total / this.listTD.length) | 0
+            // 13.number.toFixed(保留小数位数)
+            return value.toFixed(2)
+          },
+        }
+      }
+    })
+  </script>
+
+</body>
+
+</html>

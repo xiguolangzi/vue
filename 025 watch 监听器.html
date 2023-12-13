@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>watch 监听器的简单用法</title>
+  <style>
+    .lang {
+      display: flex;
+    }
+
+    select option {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="lang">
+      <p>翻译成的语言：</p>
+      <select v-model="langId">
+        <option value="001">中文</option>
+        <option value="002">英语</option>
+        <option value="003">西班牙语</option>
+        <option value="004">德语</option>
+      </select>
+    </div>
+    <div class="trans">
+      <textarea cols="100" rows="10" v-model="datas"></textarea>
+      <textarea cols="100" rows="10" v-model="toDatas"></textarea>
+      <textarea cols="100" rows="10" v-model="obj.objDatas"></textarea>
+    </div>
+
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        langId: '003',
+        datas: '',
+        toDatas: '',
+        obj: {
+          objDatas: ''
+        },
+        listLanguage: [
+          { id: '001', language: '中文' },
+          { id: '002', language: '英语' },
+          { id: '003', language: '西班牙语' },
+          { id: '004', language: '德语' },
+        ],
+        // timer: null 没有渲染的属性可以不用挂载上去
+
+      },
+      methods: {
+
+      },
+      computed: {
+
+      },
+      watch: {
+        // data:{属性监控}：该方法在数据 datas 改变时调用执行
+        datas(newData, oldData) {
+          // console.log(newData, oldData)
+          // this.toDatas = newData + +new Date()
+          // --- 防抖处理 ---
+          // 1.清理延时器 clearTimeout(延时器ID)
+          clearTimeout(this.timer)
+          // 2.添加延时器，并赋值给 延时器ID
+          this.timer = setTimeout(() => {
+            console.log(newData, oldData)
+            // 可以使用axios 调用请求返回数据
+            this.toDatas = newData + +new Date()
+          }, 300)
+
+        },
+        // data:{对象里的属性进行监控}: 该方法在数据 obj.objDatas 改变时调用执行
+        'obj.objDatas'(newDatas, oldDatas) {
+          console.log(newDatas, oldDatas)
+        }
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>computed计算属性的完整写法</title>
+</head>
+
+<body>
+  <div id="app">
+    姓：<input type="text" v-model="firstName">
+    +
+    名：<input type="text" v-model="lastName">
+    =
+    姓名：<span>{{fullName}}</span>
+    <br>
+    <br>
+    <input type="text" v-model="newName">
+    <button @click="chengeName(newName)">改名卡</button>
+
+  </div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        // newName 没有 this引用的可以不写
+        firstName: '',
+        lastName: '',
+        newName: ''
+
+      },
+      methods: {
+        chengeName(newName) {
+          this.fullName = this.newName
+        }
+
+      },
+      computed: {
+        // 计算属性的完整写法 get + set
+        fullName: {
+          // fullName 计算属性 获取值
+          get() {
+            let fullname = this.firstName + this.lastName
+            return fullname
+          },
+          // fullName 计算属性 设置值
+          set(value) {
+            // 字符串分割：str.slice(起始位置，个数)
+            this.firstName = value.slice(0, 1)
+            this.lastName = value.slice(1)
+          }
+        }
+      }
+    })
+  </script>
+
+</body>
+
+</html>
