@@ -59,6 +59,10 @@
     th {
       background-color: aquamarine;
     }
+
+    .active {
+      background-color: lightblue;
+    }
   </style>
 </head>
 
@@ -84,18 +88,21 @@
         </thead>
         <!-- 有数据 -->
         <tbody v-if="listTD.length > 0">
-          <tr v-for="(item,index) in  listTD" :key="item.id">
+          <tr v-for="(item,index) in  listTD" :key="item.id" :class="{active:item.checked}">
             <td><input type="checkbox" v-model="item.checked"></td>
             <td><img :src="item.img" :alt="item.name" style="height: 40px;"></td>
             <td>{{item.price}}</td>
             <td>
-              <button @click="item.num--" :disabled="item.num<=0"> - </button>
+              <!-- <button @click="item.num--" :disabled="item.num<=0"> - </button> -->
+              <button @click="reduce(item.id)" :disabled="item.num<=0"> - </button>
               <span>{{item.num}}</span>
-              <button @click="item.num++"> + </button>
+              <!-- <button @click="item.num++"> + </button> -->
+              <button @click="add(item.id)"> + </button>
             </td>
             <td>{{item.price * item.num}}</td>
             <td>
-              <button style="background-color: red;border-color: red;border-radius: 20%; color: aliceblue;">删除
+              <button @click="del(item.id)"
+                style="background-color: red;border-color: red;border-radius: 20%; color: aliceblue;">删除
               </button>
             </td>
           </tr>
@@ -110,26 +117,26 @@
         </tbody>
         <tfoot>
           <tr>
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox" v-model="isAll"></td>
             <td></td>
             <td colspan="2">合计金额：<span
                 style="color: red; font-size: 20px; display: inline-block; width: 80px;">{{totalMoney}}</span>$ </td>
-            <td colspan="2">结算数量：<span style="color: red; font-size: 20px;">{{totalNumber}}</span></td>
+            <td colspan="2">选中的结算数量：<span style="color: red; font-size: 20px;">{{totalNumber}}</span></td>
           </tr>
         </tfoot>
       </table>
-
     </div>
-
-    <!-- 尾部 -->
-    <div class="foot">
-
-    </div>
-
   </div>
 
   <script src="./vue.js"></script>
   <script>
+    const defaultArr = [
+      { id: 1, checked: true, img: 'img/火龙果.png', name: '火龙果', price: 5, num: 2 },
+      { id: 2, checked: false, img: 'img/荔枝.png', name: '荔枝', price: 1, num: 16 },
+      { id: 3, checked: true, img: 'img/榴莲.png', name: '榴莲', price: 7, num: 111 },
+      { id: 4, checked: false, img: 'img/鸭梨.png', name: '鸭梨', price: 12, num: 1 },
+      { id: 5, checked: true, img: 'img/樱桃.png', name: '樱桃', price: 3, num: 7 },
+    ]
     const app = new Vue({
       el: '#app',
       data: {
@@ -141,32 +148,72 @@
           { id: 5, cloumName: '小计' },
           { id: 6, cloumName: '操作' },
         ],
-        listTD: [
-          { id: 1, checked: true, img: 'img/火龙果.png', name: '火龙果', price: 5, num: 2 },
-          { id: 2, checked: false, img: 'img/荔枝.png', name: '荔枝', price: 1, num: 16 },
-          { id: 3, checked: true, img: 'img/榴莲.png', name: '榴莲', price: 7, num: 111 },
-          { id: 4, checked: false, img: 'img/鸭梨.png', name: '鸭梨', price: 12, num: 1 },
-          { id: 5, checked: true, img: 'img/樱桃.png', name: '樱桃', price: 3, num: 7 },
-        ]
+        // 初始化 json转列表 并赋予初始值 defaultArr
+        listTD: JSON.parse(localStorage.getItem('listFrutes')) || defaultArr
+        // listTD: defaultArr
 
       },
       methods: {
         del(id) {
           this.listTD = this.listTD.filter(item => item.id !== id)
+        },
+        // 加减数量
+        add(id) {
+          const fruite = this.listTD.find(item => item.id == id)
+          fruite.num++
+        },
+        reduce(id) {
+          const fruite = this.listTD.find(item => item.id == id)
+          fruite.num--
         }
       },
       computed: {
         totalMoney() {
-          let monye = this.listTD.reduce((sum, item) => sum + item.price * item.num, 0)
+          let monye = this.listTD.reduce((sum, item) => {
+            if (item.checked) {
+              return sum + item.price * item.num
+            } else {
+              return sum
+            }
+          }, 0)
           return monye.toFixed(2)
         },
         totalNumber() {
-          let number = this.listTD.reduce((sum, item) => sum + item.num, 0)
+          // 累加选中的项
+          let number = this.listTD.reduce((sum, item) => {
+            if (item.checked) {
+              return sum + item.num
+            } else {
+              return sum
+            }
+          }, 0)
           return number
+        },
+        // 全选框
+        isAll: {
+          get() {
+            // 全部选中才是true
+            let res = this.listTD.every(item => item.checked)
+            return res
+          },
+          set(value) {
+            // 修改所有的布尔值
+            this.listTD.forEach(item => item.checked = value);
+          }
         }
 
       },
       watch: {
+        // 持久化到本地
+        listTD: {
+          deep: true,
+          immediate: true,
+          handler(newValue) {
+            // 将变化后的 newvalue 存入本地，存本地之前不要忘记转json
+            localStorage.setItem('listFrutes', JSON.stringify(newValue))
+
+          }
+        }
 
       }
     })

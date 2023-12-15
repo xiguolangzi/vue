@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 的 8大钩子 </title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>{{title}}</h1>
+    <button @click="reduce" :disabled="count <= 0">-</button>
+    <span>{{count}}</span>
+    <button @click="add">+</button>
+  </div>
+
+  <script src="./vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        noShow: false,
+        count: 9,
+        title: '计数器'
+      },
+      methods: {
+        reduce() {
+          this.count--
+          console.log(this.count)
+        },
+        add() {
+          this.count++
+          console.log(this.count)
+        }
+
+      },
+      computed: {
+
+      },
+      watch: {
+
+      },
+      beforeCreate() {
+        console.log("beforeCreate 响应式数据准备好之前")
+      },
+      created() {
+        // 1. this.数据名 进行初始化响应数据
+        console.log("created 响应式数据准备好之后")
+      },
+      beforeMount() {
+        console.log("beforeMount 模板渲染之前")
+      },
+      mounted() {
+        // 模板渲染后可以操作dom元素
+        console.log("mounted 模板渲染之后", document.querySelector('h1').innerHTML)
+      },
+      beforeUpdate() {
+        console.log("beforeUpdate 修改数据之后、模板更新之前")
+      },
+      updated() {
+        console.log("updated 修改数据之后、模板更新之后")
+      },
+      // 网页端 开发者工具 console 执行语句 "app.$destroy()" 可实现卸载
+      beforeDestroy() {
+        // 释放Vue以外的资源：定时器、延时器...
+        console.log("beforeDestroy 销毁实例之前")
+      },
+      destroyed() {
+        console.log("destroyed 销毁实例之后")
+      }
+    })
+  </script>
+
+</body>
+
+</html>

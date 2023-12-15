@@ -1,0 +1,8 @@
+一.vue 的生命周期
+  1.生命周期的4各阶段：
+    1）创建阶段：响应式数据
+    2）挂载阶段：渲染模版
+    3）更新阶段：修改数据、更新视图
+    4）销毁阶段：销毁实例
+  2.生命周期的钩子
+    'beforeCreate' ->  创建阶段 -> 'created'  -> 'beforeMount' -> 挂载阶段 -> 'mounted' -> 'beforeUpdate' ->  更新阶段 -> 'updated' -> 'beforeDestroy' ->  销毁阶段 -> 'destroyed' -> 销毁；

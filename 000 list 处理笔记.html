@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>list 处理笔记</title>
+</head>
+
+<body>
+  <div></div>
+
+  <script src="./vue.js"></script>
+  <script>
+    const list1 = [
+      { id: 1, name: '张1', ischecked: true, num: 5 },
+      { id: 2, name: '张2', ischecked: true, num: 8 },
+      { id: 3, name: '张3', ischecked: true, num: 11 },
+      { id: 4, name: '张4', ischecked: true, num: 102 },
+      { id: 5, name: '张5', ischecked: true, num: 77 },
+    ]
+
+    // 1. list 追加  unshift起始位置追加
+    list1.unshift({
+      id: +new Date(),
+      name: '张6',
+      ischecked: true,
+      unm: 88
+    })
+    console.log('追加后的list:', list1)
+
+    // 2. list 删除 filter根据满足条件生成新的list2
+    list2 = list1.filter(item => item.id !== 3)
+    console.log('删除id=3的list:', list2)
+
+    // 3. list 修改
+    value1 = list1.find(item => item.id == 4)
+    value1.num = value1.num + 4
+    console.log('list1中id=4的项:', value1)
+
+    // 4. list 求和
+    // console.log('list1[1].num', list1[1].num)
+    var abc = list1.reduce((sum, item) => item.num, 0)
+    console.log('list1中求和:', abc)
+
+    // 5. list every
+    bools = list1.every(item => item.ischecked)
+    console.log('布尔值:', bools)
+
+    // 6. list find  找到list中 id == 4 的项
+    value1 = list1.find(item => item.id == 4)
+
+
+  </script>
+
+</body>
+
+</html>

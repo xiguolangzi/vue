@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mounted 渲染之后的阶段</title>
+  <style>
+    .search-container {
+      text-align: center;
+      width: 300px;
+    }
+
+    .search-box {
+      height: 30px;
+      width: 300px;
+      display: flex;
+      border: 0.5px solid gainsboro;
+      border-radius: 10px;
+    }
+
+    .search-box input {
+      flex: 4;
+      border: none;
+    }
+
+    .search-box button {
+      flex: 1;
+      border: none;
+      background-color: brown;
+      color: white;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div id="app">
+    <div class="search-container">
+      <h1>黑马程序员LOGO</h1>
+      <div class="search-box">
+        <input type="text" v-model="words" id="inp">
+        <button>搜索一下</button>
+      </div>
+    </div>
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+
+      },
+      methods: {
+
+      },
+      computed: {
+
+      },
+      watch: {
+
+      },
+      mounted() {
+        // 模板渲染之后修改模板元素,输入框自动获取指针
+        document.querySelector('#inp').focus()
+      }
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小黑记账清单</title>
+  <style>
+    .main {
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .left {
+      flex: 1;
+    }
+
+    .right {
+      flex: 2;
+      background-color: blueviolet;
+    }
+
+    .search {
+      width: 500px;
+      height: 30px;
+      display: flex;
+    }
+
+    .search .name {
+      flex: 2;
+      margin: 1px;
+      border-radius: 2px;
+      border: 0.5px solid grey;
+    }
+
+    .search .price {
+      flex: 2;
+      margin: 1px;
+      border-radius: 2px;
+      border: 0.5px solid grey;
+    }
+
+    .search button {
+      flex: 1;
+      border-radius: 5px;
+      margin-right: 10px;
+      border: 0.5px solid blue;
+      background-color: hsl(226, 79%, 46%);
+      color: aliceblue;
+    }
+
+    .list-table table {
+      width: 100%;
+      text-align: center;
+      margin: 10px;
+      padding: 3px;
+      /* border: 1px solid gray; */
+    }
+
+    .list-table table thead {
+      border: 1px solid gray;
+      background-color: hsl(240, 26%, 93%);
+    }
+
+    .list-table table tbody {
+      border: 1px solid #e70b0b;
+      /* background-color: hsl(170, 57%, 80%); */
+    }
+
+    .list-table table tbody button {
+      border: none;
+      color: blue;
+      background-color: white;
+    }
+
+    .nodata {
+      height: auto;
+    }
+
+    .red {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="main">
+    <div class="left">
+      <div class="search">
+        <input type="text" class="name" placeholder="消费名称" v-model.trim="name">
+        <input type="text" class="price" placeholder="消费价格" v-model.number="price">
+        <button @click="add">添加账单</button>
+      </div>
+      <div class="list-table">
+        <table>
+          <thead>
+            <tr>
+              <th v-for="(item,index) in listTH" :key="item.id">{{item.name}}</th>
+            </tr>
+          </thead>
+          <tbody class="datas" v-if="listTD.length > 0">
+            <tr v-for="(item,index) in listTD" :key="item.id">
+              <td>{{index+1}}</td>
+              <td>{{item.name}}</td>
+              <td :class="{red:item.price>=500}">{{item.price.toFixed(2)}}</td>
+              <td>
+                <button @click="del(item.id)">删除</button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody class="no-datas" v-else>
+            <tr>
+              <td :colspan="listTH.length">
+                <span>空空如也！</span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>
+                <span>{{sumName}}</span>
+                <span style="color: #e9540f;">{{total}}</span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="right">
+      <div class="map"></div>
+    </div>
+
+
+  </div>
+
+  <script src="./vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        listTH: [
+          { id: 1, name: '编号' },
+          { id: 2, name: '消费名称' },
+          { id: 3, name: '消费价格' },
+          { id: 4, name: '操作' },
+        ],
+        // 通过created阶段请求获取listTD
+        listTD: [
+          // { id: 1, name: '手表', price: 299 },
+          // { id: 2, name: '棉大衣', price: 199 },
+          // { id: 3, name: '球鞋', price: 399 },
+          // { id: 4, name: '鸭舌帽', price: 99 },
+        ],
+        listTF: [
+
+        ],
+        sumName: '消费总计：',
+        name: '',
+        price: ''
+
+      },
+      methods: {
+        async del(id) {
+          // this.listTD = this.listTD.filter(item => item.id !== id)
+          await axios.delete(
+            `https://applet-base-api-t.itheima.net/bill/${id}`
+          )
+          // 删除后重新渲染页面
+          this.getList()
+        },
+        async add() {
+          if (!this.name) {
+            alert('请输入 消费名称！')
+            return
+          }
+          if (typeof (this.price) !== "number") {
+            alert('请正确输入 消费价格！')
+            return
+          }
+          const res = await axios.post(
+            'https://applet-base-api-t.itheima.net/bill',
+            {
+              creator: '小黑',
+              name: this.name,
+              price: this.price
+            }
+          )
+          console.log('添加功能的结果：', res)
+          // 添加后重新渲染页面
+          this.getList()
+          this.name = ''
+          this.price = ''
+        },
+        // 封装函数 便于后面Vue不同阶段调用
+        async getList() {
+          const res = await axios.get('https://applet-base-api-t.itheima.net/bill', {
+            params: {
+              creator: '小黑'
+            }
+          })
+          console.log(res)
+          this.listTD = res.data.data
+          console.log(this.listTD)
+        }
+
+      },
+      computed: {
+        total: {
+          get() {
+            total = this.listTD.reduce((sum, item) => sum + item.price, 0)
+            return total.toFixed(2)
+          },
+          set() {
+
+          }
+        }
+
+      },
+      watch: {
+
+      },
+      // async created() {
+      //   const res = await axios.get('https://applet-base-api-t.itheima.net/bill', {
+      //     params: {
+      //       creator: '小黑'
+      //     }
+      //   })
+      //   console.log(res)
+      //   this.listTD = res.data.data
+      //   console.log(this.listTD)
+      // },
+      created() {
+        // 封装函数 在 methods 里
+        this.getList()
+      }
+    })
+  </script>
+
+</body>
+
+</html>
