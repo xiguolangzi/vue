@@ -6,19 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小黑记账清单</title>
   <style>
-    .main {
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-
     .left {
-      flex: 1;
-    }
-
-    .right {
-      flex: 2;
-      background-color: blueviolet;
+      width: 600px;
+      height: 400px;
     }
 
     .search {
@@ -89,7 +79,7 @@
 </head>
 
 <body>
-  <div id="app" class="main">
+  <div id="app" class="windos">
     <div class="left">
       <div class="search">
         <input type="text" class="name" placeholder="消费名称" v-model.trim="name">
@@ -132,7 +122,7 @@
       </div>
     </div>
     <div class="right">
-      <div class="map"></div>
+      <div class="main" style="width: 600px;height:400px;"></div>
     </div>
 
 
@@ -140,7 +130,26 @@
 
   <script src="./vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- 图标插件 echarts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
   <script>
+    /*
+      操作流程：
+      1.界面渲染：
+        (1) 在created阶段 请求数据 渲染界面 v-if  v-bind 样式处理 ....
+      2.添加功能：
+        (1) 收集表单数据 v-model
+        (2) 给添加按钮注册点击事件，发起添加请求，更新数据项
+        (3) 需要重新渲染
+      3.删除功能：
+        (1) 注册点击事件，传参id
+        (2) 根据id发起删除请求
+        (3) 需要重新渲染
+      4.饼图渲染：
+        (1) 初始化一个饼图 echarts 在mounted渲染之后的阶段实现
+        (2) 根据数据时时更新饼图数据 this.myChart.setOption({ series:[] }) 
+
+    */
     const app = new Vue({
       el: '#app',
       data: {
@@ -162,7 +171,9 @@
         ],
         sumName: '消费总计：',
         name: '',
-        price: ''
+        price: '',
+        mapTitle: '消费饼状图',
+        mapName: '消费账单：'
 
       },
       methods: {
@@ -207,6 +218,31 @@
           console.log(res)
           this.listTD = res.data.data
           console.log(this.listTD)
+
+          // 更新图表
+          this.myChart.setOption({
+            // 时时更新的数据项
+            series: [
+              {
+                // name: this.mapName,
+                // type: 'pie',
+                // radius: '60%',
+                // data: [
+                //   { value: 1048, name: 'Search Engine' },
+                //   { value: 735, name: 'Direct' },
+                // ],
+                data: this.listTD.map(item => ({ value: item.price, name: item.name })),
+                // 阴影效果
+                // emphasis: {
+                //   itemStyle: {
+                //     shadowBlur: 10,
+                //     shadowOffsetX: 0,
+                //     shadowColor: 'rgba(0, 0, 0, 0.5)'
+                //   }
+                // }
+              }
+            ]
+          })
         }
 
       },
@@ -238,6 +274,55 @@
       created() {
         // 封装函数 在 methods 里
         this.getList()
+      },
+      mounted() {
+        // 基于准备好的dom，初始化echarts实例  注意通过this.挂载到实例上 方便其他地方引用
+        this.myChart = echarts.init(document.querySelector('.main'))
+
+        // 指定图表的配置项和数据
+        let option = {
+          // 大标题
+          title: {
+            text: this.mapTitle,
+            subtext: new Date(),
+            left: 'center'
+          },
+          // 提示框
+          tooltip: {
+            trigger: 'item'
+          },
+          // 图例
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          // 数据项 需要时时更新的部分 保持格式层次
+          series: [
+            {
+              name: this.mapName,
+              type: 'pie',
+              radius: '60%',
+              data: [
+                // { value: 1048, name: 'Search Engine' },
+                // { value: 735, name: 'Direct' },
+                // { value: 580, name: 'Email' },
+                // { value: 484, name: 'Union Ads' },
+                // { value: 300, name: 'Video Ads' }
+              ],
+              // 阴影效果
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表
+        this.myChart.setOption(option)
       }
     })
   </script>
