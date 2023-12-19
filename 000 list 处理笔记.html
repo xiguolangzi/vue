@@ -50,6 +50,15 @@
     // 6. list find  找到list中 id == 4 的项
     value1 = list1.find(item => item.id == 4)
 
+    // 7.list.map 遍历
+    listTD = [
+      { id: 1, price: 66, name: '茄子', color: '紫色' },
+      { id: 2, price: 66, name: '茄子', color: '紫色' },
+      { id: 3, price: 66, name: '茄子', color: '紫色' },
+    ]
+    // listTD.map 遍历的 item 最后返回指定数组[{value:'',name:''},{...},...]
+    newList = listTD.map(item => ({ value: item.price, name: item.name }))
+
 
   </script>
 

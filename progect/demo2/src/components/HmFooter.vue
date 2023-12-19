@@ -1,0 +1,22 @@
+<template>
+  <div class="hm-footer">
+    我是 hm-footer
+    <HmButton></HmButton>
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+.hm-footer{
+  height: 100px;
+  line-height: 100PX;
+  text-align: center;
+  font-size: 30px;
+  background-color: #1a54d1;
+}
+</style>
