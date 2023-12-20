@@ -61,27 +61,27 @@
   },
 
 9.不同组件之间的关系
-  A. 父子关系：
-    1. props 父传子
-	    （1）父级通过data创建参数：data(){return{myTitle:'黑马程序员'}}
-	    （2）父级在引用子级组件时通过设置属性传递参数：:title=''myTitle''
-	    （3）子级通过props获取父级传递的参数，props:['title',]
-	    （4）子级引用参数 {{title}}
-    2. $emit 子传父
-	    （1）父级在引用子级元素 添加传递参数后，设置监听函数 @changeTitle="handleChange"
-		      changeTitle：子级的调用函数
-		      handleChange：父级根据自己传参实行的处理函数
-	    （2）父级添加处理函数 ：
-		      methods:{
-            handleChange(newdatas){
-              this.oldDatas =  newdatas
-            }
-          },
-      （3）子级通过点击事件触发 父级的修改函数
-        methods:{
-          changeFn(){
-            // 通过$emit('父级监听函数名','修改的值') 向父级发送消息通知
-            this.$emit('changeTitle','修改后的值')
-          }
-        }
-  B. 非父子关系:
+    父子关系
+        props    父传子
+	（1）父级通过data创建参数：data(){return{myTitle:'黑马程序员'}}
+	（2）父级在引用子级组件时通过设置属性传递参数：:title=''myTitle''
+	（3）子级通过props获取父级传递的参数，props:['title',]
+	（4）子级引用参数 {{title}}
+        $emit    子传父
+	（1）父级在引用子级元素 添加传递参数后，设置监听函数 @changeTitle="handleChange"
+		changeTitle：子级的调用函数
+		handleChange：父级根据自己传参实行的处理函数
+	（2）父级添加处理函数 ：
+		methods:{
+		    handleChange(newdatas){
+		       this.oldDatas =  newdatas
+		    },
+		}
+	（3）子级通过点击事件触发 父级的修改函数
+		methods:{
+			changeFn(){
+			   // 通过$emit('父级监听函数名','修改的值') 向父级发送消息通知
+			   this.$emit('changeTitle','修改后的值')
+			}
+		}
+    非父子关系
