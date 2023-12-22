@@ -63,7 +63,12 @@
 9.不同组件之间的关系
   A. 父子关系：
     1. props 父传子
-	    （1）父级通过data创建参数：data(){return{myTitle:'黑马程序员'}}
+	    （1）父级通过data创建参数：
+        data(){
+          return{
+            myTitle:'黑马程序员'
+          }
+        }
 	    （2）父级在引用子级组件时通过设置属性传递参数：:title=''myTitle''
 	    （3）子级通过props获取父级传递的参数，props:['title',]
 	    （4）子级引用参数 {{title}}
@@ -155,3 +160,55 @@
       export default {
         inject:['color','userInfo']
       }
+
+10. v-model 父子组件双向绑定拆分
+  A. 不同表单v-model拆分不一样：
+    （1）下拉菜单： v-model = :value='' + @change=''
+    （2）输入框： v-model = :value='' + @input=''
+
+  B. 父子组件 使用举例：
+    父组件：
+      <BaseSelect 
+        //传递参数
+        :cityId="selectedId" 
+        //监听函数
+        @changeId="selectId"
+      ></BaseSelect>
+
+      export default{
+        data(){
+          return{
+            selectedId = '102'
+          }
+        },
+        methods:{
+          selectId(value){
+            this.selectedId = value
+          },
+        },
+      }
+
+    子组件：
+      export default {
+        //接收父组件参数
+        props:{
+          cityId:{
+            type:String,
+            default:'103'
+          }
+        },
+        methods:{
+          //修改下拉菜单调用函数@change='fn'
+          fn(e){
+            //修改后的参数返传给父组件的监听函数进行修改
+            this.$emit('changeId',e.target.value)
+          }
+        }
+      }
+
+  C. 父组件使用 v-model
+    父组件使用 v-model 的方式 :
+      v-model="selectedId"
+      相当于：
+      :value='selectedId' @input='this.selectedId = value'
+      子组件相对接收 value ，监听函数 input

@@ -9,7 +9,26 @@
     <BaseCount></BaseCount>
     <!-- 1. 给子组件标签，通过添加属性的方式 传值 -->
     <!-- 传值后，添加监听函数 @changeTitle="handleChange"-->
-    <BaseSon :title="myTitle" @changeTitle="handleChange"></BaseSon>
+    <BaseSon 
+      :title="myTitle" 
+      @changeTitle="handleChange"
+    ></BaseSon>
+    <!-- 
+      v-model 组件简化拆分:
+      1. 表单输入框：v-model = :value + @input；
+      2. 表单下拉菜单：v-model = :value='' + @changed=''；
+     -->
+    <BaseSelect 
+      :cityId="selectedId" 
+      @changeId="selectId"
+    ></BaseSelect>
+    <!-- 
+      父组件使用 v-model 的方式 :
+      v-model="selectedId"
+      相当于：
+      :value='selectedId' @input='this.selectedId = value'
+    -->
+    <BaseVmodel v-model="selectedId"></BaseVmodel>
     
   </div>
 </template>
@@ -19,13 +38,20 @@ import BaseCount from './components/BaseCount.vue';
 import BaseOne from './components/BaseOne.vue';
 import BaseTwo from './components/BaseTwo.vue';
 import BaseSon from './components/BaseSon.vue';
+// v-model 组件简化拆分
+import BaseSelect from './components/BaseSelect.vue';
+// 父组件使用 v-model
+import BaseVmodel from './components/BaseVmodel.vue';
 
 export default {
   components:{
     BaseOne:BaseOne,
     BaseTwo,
     BaseCount,
-    BaseSon
+    BaseSon,
+    // v-model 组件简化拆分
+    BaseSelect,
+    BaseVmodel
   },
   data(){
     return{
@@ -37,6 +63,7 @@ export default {
         name:'EZ',
         age:18
       },
+      selectedId:'105'
     }
   },
   methods:{
@@ -49,7 +76,11 @@ export default {
       this.color = 'green'
       this.userInfo.name = 'KING'
       this.userInfo.age = 31
-    }
+    },
+    // v-model 组件简化拆分
+    selectId(value){
+      this.selectedId = value
+    },
   },
   // 为子孙后代夸层级提供参数 provide
   provide(){
