@@ -84,4 +84,74 @@
             this.$emit('changeTitle','修改后的值')
           }
         }
-  B. 非父子关系:
+      
+      3. props的完整写法
+      props:{
+        title:{
+          // a.类型判断
+          type:String,
+          // b.必传校验、非空校验
+          require:true,
+          // c.默认值设置
+          default:"黑马程序员",
+          // d.自定义逻辑校验
+          validator(value){
+            console.log(value)
+            //传入值value的校验逻辑
+            return true
+          }
+        }
+      },
+  B. 非父子关系 组件通信(消息推送原理):
+    （1）新建js文件 -> 创建消息调度中心(Vue实例)
+      import Vue from 'vue'
+      const Bus = new Vue()
+      export default Bus
+
+    （2）组件A 消息订阅
+      import Bus from ../utils/EvenBus.js
+      export default {
+        created(){
+          Bus.$on('sendMsg',(msg)=>{
+            console.log(msg)
+            //接收到的订阅消息msg的处理逻辑
+          })
+        },
+      }
+    （3）组件B 发送消息
+    import Bus from ../utils/EvenBus.js
+    export default{
+      methods:{
+        clickSend(){
+          Bus.$emit('sendMsg','要发送的消息')
+        }
+      }
+    }
+
+  C.子孙组件 跨层级共享数据
+    （1）父类组件 设置共享数据
+      export default {
+        provide(){
+          return{
+            // 简单数据类型 - 非响应式
+            color:'red',
+            // 复杂数据类型 - 响应式
+            userInfo:{
+              name:'EZ',
+              age:18
+            }
+          }
+        }
+      }
+
+    （2）子孙组件 设置共享数据
+      <div>
+        //简单数据类型 - 不会因根组件传过来的数据改变而改变
+        {{color}}
+        //复杂数据类型 - 会因根组件传过来的数据改变而改变
+        {{userInfo.name}}
+        {{userInfo.age}}
+      </div>
+      export default {
+        inject:['color','userInfo']
+      }

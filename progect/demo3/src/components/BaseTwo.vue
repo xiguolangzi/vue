@@ -1,12 +1,21 @@
 <template>
   <div class="base-two">
     我是 BaseTwo
+    <button @click="clickSend">发布消息通知</button>
   </div>
 </template>
 
 <script>
+// 导入事件调度中心
+import Bus from '../utils/EventBus';
 export default {
-
+  methods:{
+    clickSend(){
+      // 3.发布消息
+      // .$emit('订阅标识','发送的消息')
+      Bus.$emit('sendMsg','今日天气不错！')
+    },
+  }
 }
 </script>
 
